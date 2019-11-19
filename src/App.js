@@ -10,9 +10,12 @@ import ErrorDisplay from './components/ErrorDisplay';
 const stylesheet = {
   App: {
     padding: '1rem',
+    fontFamily: '"Segoe UI",Arial,sans-serif',
+    fontSize: '1rem',
   },
   TwitterForm: {
     display: 'flex',
+    flexFlow: 'column',
   }
 }
 
