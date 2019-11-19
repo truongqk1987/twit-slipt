@@ -1,1 +1,2 @@
 export const TWITTER_TEXT_FIELD_INIT_ROWS = 3;
+export const ACCEPTED_MAXIMUM_CHARS = 50;

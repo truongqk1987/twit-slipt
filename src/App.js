@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { splitMessage } from './utils';
+import { splitMessage, checkExistedWordOverAcceptedChars } from './utils';
 
 import Input from './components/TwitterTextField';
 import Button from './components/TwitterSendButton';
@@ -12,20 +12,24 @@ const App = () => {
   const [listTweetedMessages, setListTweetedMessages] = useState([]);
 
   const onInputMessageChanged = useCallback((event) => {
-    setInputMessage(event.target.value);
+    const changedInputMessage = event.target.value;
+    try {
+      checkExistedWordOverAcceptedChars(changedInputMessage);
+      setErrorMessage('');
+    } catch(error) {
+      setErrorMessage(error.message)
+    } finally {
+      setInputMessage(changedInputMessage);
+    }
   }, []);
 
   const sendMessage = useCallback((event) => {
-    try {
-      const messageSentParts = splitMessage(inputMessage);
-      listTweetedMessages.push({
-        inputMessage,
-        messageSentParts,
-      })
-      setListTweetedMessages(listTweetedMessages);
-    } catch(error) {
-      setErrorMessage(error.message)
-    }
+    const messageSentParts = splitMessage(inputMessage);
+    listTweetedMessages.push({
+      inputMessage,
+      messageSentParts,
+    })
+    setListTweetedMessages(listTweetedMessages);
   }, [inputMessage, listTweetedMessages]);
 
   
