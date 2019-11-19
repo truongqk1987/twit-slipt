@@ -1,5 +1,11 @@
 import React from 'react';
+import injectSheet from 'react-jss'
 
-const TwitterSendButton = (props) => <button onClick={props.onClick}>Tweet</button>;
+const stylesheet = {
+  TwitterSendButton: {}
+}
 
-export default TwitterSendButton;
+const TwitterSendButton = ({ classes, onClick }) => 
+  <button onClick={onClick} className={classes.TwitterSendButton}>Tweet</button>;
+
+export default injectSheet(stylesheet)(TwitterSendButton);

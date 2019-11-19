@@ -1,6 +1,14 @@
 
 import React from 'react';
+import injectSheet from 'react-jss'
 
-const ErrorDisplay = (props) => <div>{props.errorMessage}</div>
+const stylesheet = {
+  ErrorDisplay: {
+    color: 'red',
+  }
+}
 
-export default ErrorDisplay;
+const ErrorDisplay = ({errorMessage, classes}) => errorMessage ?
+  <div className={classes.ErrorDisplay}>{errorMessage}</div> : null;
+
+export default injectSheet(stylesheet)(ErrorDisplay);

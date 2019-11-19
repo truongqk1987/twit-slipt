@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import injectSheet from 'react-jss'
 
 import { splitMessage, checkExistedWordOverAcceptedChars } from './utils';
 
@@ -6,7 +7,16 @@ import Input from './components/TwitterTextField';
 import Button from './components/TwitterSendButton';
 import ErrorDisplay from './components/ErrorDisplay';
 
-const App = () => {
+const stylesheet = {
+  App: {
+    padding: '1rem',
+  },
+  TwitterForm: {
+    display: 'flex',
+  }
+}
+
+const App = ({classes}) => {
   const [inputMessage, setInputMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [listTweetedMessages, setListTweetedMessages] = useState([]);
@@ -34,13 +44,14 @@ const App = () => {
 
   
   return (
-    
-    <div className="App">
-      <ErrorDisplay errorMessage={errorMessage}></ErrorDisplay>
-      <Input onChange={onInputMessageChanged} value={inputMessage}/>
-      <Button onClick={sendMessage} />
+    <div className={classes.App}>
+      <ErrorDisplay errorMessage={errorMessage}></ErrorDisplay>,
+      <div className={classes.TwitterForm}>
+        <Input onChange={onInputMessageChanged} value={inputMessage}/>
+        <Button onClick={sendMessage} />
+      </div>
     </div>
   );
 }
 
-export default App;
+export default injectSheet(stylesheet)(App);

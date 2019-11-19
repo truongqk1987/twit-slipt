@@ -1,12 +1,20 @@
 import React from 'react';
+import injectSheet from 'react-jss'
+
 import {
   TWITTER_TEXT_FIELD_INIT_ROWS
 } from '../../globalConstants';
 
-const TwitterTextField = (props) => (
-  <textarea rows={TWITTER_TEXT_FIELD_INIT_ROWS} 
-    onChange={props.onChange}
+const stylesheet = {
+  TwitterTextField: {
+    flexGrow: 1
+  }
+}
+
+const TwitterTextField = ({classes, onChange}) => (
+  <textarea className={classes.TwitterTextField} rows={TWITTER_TEXT_FIELD_INIT_ROWS} 
+    onChange={onChange}
   />
 )
 
-export default TwitterTextField;
+export default injectSheet(stylesheet)(TwitterTextField);
