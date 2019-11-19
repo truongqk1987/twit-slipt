@@ -6,7 +6,7 @@ import Input from './components/TwitterTextField';
 import Button from './components/TwitterSendButton';
 import ErrorDisplay from './components/ErrorDisplay';
 
-function App() {
+const App = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [listTweetedMessages, setListTweetedMessages] = useState([]);
