@@ -12,10 +12,13 @@ const stylesheet = {
     padding: '1rem',
     fontFamily: '"Segoe UI",Arial,sans-serif',
     fontSize: '1rem',
-  },
-  TwitterForm: {
     display: 'flex',
     flexFlow: 'column',
+  },
+  TwitterBottom: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingTop: '0.5rem',
   }
 }
 
@@ -48,10 +51,10 @@ const App = ({classes}) => {
   
   return (
     <div className={classes.App}>
-      <ErrorDisplay errorMessage={errorMessage}></ErrorDisplay>,
-      <div className={classes.TwitterForm}>
-        <Input onChange={onInputMessageChanged} value={inputMessage}/>
-        <Button onClick={sendMessage} />
+      <Input onChange={onInputMessageChanged} value={inputMessage}/>
+      <div className={classes.TwitterBottom}>
+        <ErrorDisplay errorMessage={errorMessage}></ErrorDisplay>
+        <Button onClick={sendMessage} disabled={!!errorMessage}/>
       </div>
     </div>
   );

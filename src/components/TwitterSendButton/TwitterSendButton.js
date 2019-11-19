@@ -3,7 +3,6 @@ import injectSheet from 'react-jss'
 
 const stylesheet = {
   TwitterSendButton: {
-    paddingTop: '0.5rem',
     textAlign: 'right',
     '&>button': {
       color: 'white',
@@ -19,14 +18,18 @@ const stylesheet = {
       '&:focus': {
         boxShadow: '0 0 0 2px #FFFFFF, 0 0 0 4px #A4D9F9',
         outline: 'none',
+      },
+      '&:disabled': {
+        background: 'grey',
+        cursor: 'not-allowed',
       }
     }
   }
 }
 
-const TwitterSendButton = ({ classes, onClick }) => 
+const TwitterSendButton = ({ classes, onClick, disabled }) => 
   <div className={classes.TwitterSendButton}>
-    <button onClick={onClick}>Tweet</button>
+    <button onClick={onClick} disabled={disabled}>Tweet</button>
   </div>;
 
 export default injectSheet(stylesheet)(TwitterSendButton);

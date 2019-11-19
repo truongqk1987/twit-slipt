@@ -5,6 +5,7 @@ import injectSheet from 'react-jss'
 const stylesheet = {
   ErrorDisplay: {
     color: 'red',
+    flexGrow: '1',
   }
 }
 
