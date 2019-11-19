@@ -1,0 +1,1 @@
+export const TWITTER_TEXT_FIELD_INIT_ROWS = 3;
