@@ -1,24 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useCallback, useState } from 'react';
+
+import { splitMessage } from './utils';
+
+import Input from './components/TwitterTextField';
+import Button from './components/TwitterSendButton';
+import ErrorDisplay from './components/ErrorDisplay';
 
 function App() {
+  const [inputMessage, setInputMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [listTweetedMessages, setListTweetedMessages] = useState([]);
+
+  const onInputMessageChanged = useCallback((event) => {
+    setInputMessage(event.target.value);
+  }, []);
+
+  const sendMessage = useCallback((event) => {
+    try {
+      const messageSentParts = splitMessage(inputMessage);
+      listTweetedMessages.push({
+        inputMessage,
+        messageSentParts,
+      })
+      setListTweetedMessages(listTweetedMessages);
+    } catch(error) {
+      setErrorMessage(error.message)
+    }
+  }, [inputMessage, listTweetedMessages]);
+
+  
   return (
+    
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ErrorDisplay errorMessage={errorMessage}></ErrorDisplay>
+      <Input onChange={onInputMessageChanged} value={inputMessage}/>
+      <Button onClick={sendMessage} />
     </div>
   );
 }
