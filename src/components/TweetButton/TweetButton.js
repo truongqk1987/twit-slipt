@@ -2,7 +2,7 @@ import React from 'react';
 import injectSheet from 'react-jss'
 
 const stylesheet = {
-  TwitterSendButton: {
+  TweetButton: {
     textAlign: 'right',
     '&>button': {
       color: 'white',
@@ -27,9 +27,9 @@ const stylesheet = {
   }
 }
 
-const TwitterSendButton = ({ classes, onClick, disabled }) => 
-  <div className={classes.TwitterSendButton}>
+const TweetButton = ({ classes, onClick, disabled }) => 
+  <div className={classes.TweetButton}>
     <button onClick={onClick} disabled={disabled}>Tweet</button>
   </div>;
 
-export default injectSheet(stylesheet)(TwitterSendButton);
+export default injectSheet(stylesheet)(TweetButton);

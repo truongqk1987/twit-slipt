@@ -3,9 +3,9 @@ import injectSheet from 'react-jss'
 
 import { splitMessage, checkExistedWordOverAcceptedChars } from './utils';
 
-import Input from './components/TwitterTextField';
-import Button from './components/TwitterSendButton';
-import ErrorDisplay from './components/ErrorDisplay';
+import MessageInput from './components/MessageInput';
+import TweetButton from './components/TweetButton';
+import MessageError from './components/MessageError';
 
 const stylesheet = {
   App: {
@@ -51,10 +51,10 @@ const App = ({classes}) => {
   
   return (
     <div className={classes.App}>
-      <Input onChange={onInputMessageChanged} value={inputMessage}/>
+      <MessageInput onChange={onInputMessageChanged} value={inputMessage}/>
       <div className={classes.TwitterBottom}>
-        <ErrorDisplay errorMessage={errorMessage}></ErrorDisplay>
-        <Button onClick={sendMessage} disabled={!!errorMessage}/>
+        <MessageError message={errorMessage}></MessageError>
+        <TweetButton onClick={sendMessage} disabled={!!errorMessage}/>
       </div>
     </div>
   );
