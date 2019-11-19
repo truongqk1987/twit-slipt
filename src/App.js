@@ -25,9 +25,10 @@ const stylesheet = {
 const App = ({classes}) => {
   const [inputMessage, setInputMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [listTweetedMessages, setListTweetedMessages] = useState([]);
+  const [tweetedMessages, setTweetedMessages] = useState([]);
 
   const onInputMessageChanged = useCallback((event) => {
+    debugger;
     const changedInputMessage = event.target.value;
     try {
       checkExistedWordOverAcceptedChars(changedInputMessage);
@@ -40,13 +41,18 @@ const App = ({classes}) => {
   }, []);
 
   const sendMessage = useCallback((event) => {
-    const messageSentParts = splitMessage(inputMessage);
-    listTweetedMessages.push({
-      inputMessage,
-      messageSentParts,
-    })
-    setListTweetedMessages(listTweetedMessages);
-  }, [inputMessage, listTweetedMessages]);
+    try {
+      const messageSentParts = splitMessage(inputMessage);
+      const updatedTweetedMessages = [...tweetedMessages];
+      updatedTweetedMessages.push({
+        inputMessage,
+        messageSentParts,
+      })
+      setTweetedMessages(updatedTweetedMessages);
+    } catch(error) {
+      setErrorMessage(error.message)
+    }
+  }, [inputMessage, tweetedMessages]);
 
   
   return (
@@ -54,8 +60,21 @@ const App = ({classes}) => {
       <MessageInput onChange={onInputMessageChanged} value={inputMessage}/>
       <div className={classes.TwitterBottom}>
         <MessageError message={errorMessage}></MessageError>
-        <TweetButton onClick={sendMessage} disabled={!!errorMessage}/>
+        <TweetButton onClick={sendMessage} disabled={!!errorMessage || !inputMessage}/>
       </div>
+      <ul>
+        {
+          tweetedMessages.map((tweetedMessage) => {
+            return <li>{tweetedMessage.inputMessage}
+              <ul>
+                { tweetedMessage.messageSentParts.map((messageSentPart) => {
+                  return <li>{messageSentPart}</li>
+                })}
+              </ul>
+            </li>
+          })
+        }
+      </ul>
     </div>
   );
 }
