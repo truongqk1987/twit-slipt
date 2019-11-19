@@ -10,9 +10,12 @@ export const checkExistedWordOverAcceptedChars = (message) => {
 
 export const splitMessage = (message) => {
   let result = [];
+
+  if (message.length <= 50) return [ message ];
+
   checkExistedWordOverAcceptedChars(message);
-  const numberOfParts = Math.ceil(message.length / ACCEPTED_MAXIMUM_CHARS);
-  alert('doit: ' + (message.length / ACCEPTED_MAXIMUM_CHARS));
+  
+  let numberOfParts = Math.ceil(message.length / (ACCEPTED_MAXIMUM_CHARS - 4));
   const nonWhiteSpaceWordArray = message.split(' ');
   for (var i = 1; i <= numberOfParts; i++) {
     let part = Array.from(`${i}/${numberOfParts}`);
