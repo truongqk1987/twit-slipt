@@ -1,5 +1,5 @@
 /* eslint-disable no-loop-func */
-import { ACCEPTED_MAXIMUM_CHARS } from './globalConstants';
+import { ACCEPTED_MAXIMUM_CHARS } from '../globalConstants';
 
 export const checkExistedWordOverAcceptedChars = (message) => {
   const regex = new RegExp(`([\\S]){${ACCEPTED_MAXIMUM_CHARS},}`,'g')
@@ -44,7 +44,7 @@ export const splitMessage = (inputMessage) => {
   // Error will be caught by the function call splitMessage()
   checkExistedWordOverAcceptedChars(inputMessage);
 
-  const nonWhiteSpaceWords = inputMessage.split(' ');
+  const nonWhiteSpaceWords = inputMessage.split(/\s+|\n+|\r\n+|\r+/);
 
   let totalMessageParts = -1;
   let messageParts = MessageParts();
