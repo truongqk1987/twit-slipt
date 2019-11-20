@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import { ACCEPTED_MAXIMUM_CHARS } from './globalConstants';
 
 export const checkExistedWordOverAcceptedChars = (message) => {
@@ -8,29 +9,60 @@ export const checkExistedWordOverAcceptedChars = (message) => {
   }
 }
 
-export const splitMessage = (message) => {
-  let result = [];
+export const splitMessage = (inputMessage) => {
+  let messageParts = [];
 
-  if (message.length <= 50) return [ message ];
+  if (inputMessage.length <= 50) return [ inputMessage ];
 
-  checkExistedWordOverAcceptedChars(message);
-  
-  let numberOfParts = Math.ceil(message.length / (ACCEPTED_MAXIMUM_CHARS - 4));
-  const nonWhiteSpaceWordArray = message.split(' ');
-  for (var i = 1; i <= numberOfParts; i++) {
-    let part = Array.from(`${i}/${numberOfParts}`);
-    let word = nonWhiteSpaceWordArray.shift()
-    while (word) {
+  // Error will be caught by the function call splitMessage()
+  checkExistedWordOverAcceptedChars(inputMessage);
 
-      if ((part.length + 1 + word.length) <= 50) {
-        part = [...part, ' ', ...Array.from(word)];
-        word = nonWhiteSpaceWordArray.shift();
-      } else {
-        nonWhiteSpaceWordArray.unshift(word);
-        break;
+  let indicator = 0;
+  let totalMessageParts;
+  let partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
+
+  let counter = partIndicator.length;
+  let startIndex = 0;
+  const nonWhiteSpaceWords = inputMessage.split(' ');
+
+  while (messageParts.length !== totalMessageParts) {
+    totalMessageParts = messageParts.length;
+    indicator = 0;
+    startIndex = 0;
+    messageParts = [];
+    nonWhiteSpaceWords.forEach((word, index) => {
+      counter = counter + 1 + word.length // 1 for space between indicator and word
+      if (counter > ACCEPTED_MAXIMUM_CHARS) {
+        // Pickup a word but it make counter > 56
+        // So we will return back this word, and reset counter,
+        // The counter should be start equal word.length (which be returned);
+        counter = word.length;
+        const messagePart = nonWhiteSpaceWords.slice(startIndex, index);
+        indicator++;
+        partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
+        messageParts.push([partIndicator, ...messagePart].join(' '));
+        startIndex = index;
       }
-    }
-    result.push(part.join(''));
+      if (counter === ACCEPTED_MAXIMUM_CHARS) {
+        counter = 0;
+        const messagePart = nonWhiteSpaceWords.slice(startIndex, index + 1);
+        indicator++;
+        partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
+        messageParts.push([partIndicator, ...messagePart].join(' '));
+        startIndex = index;
+  
+      }
+      if (index === nonWhiteSpaceWords.length -1) {
+        // When counter < 50 but don't have any word to check
+        // Add it as a final message part;
+        const messagePart = nonWhiteSpaceWords.slice(startIndex, index + 1);
+        indicator++;
+        partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
+        messageParts.push([partIndicator, ...messagePart].join(' '));
+        counter = 0;
+      }
+    })
   }
-  return result;
+
+  return messageParts;
 }

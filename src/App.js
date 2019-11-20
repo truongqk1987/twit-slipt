@@ -6,6 +6,7 @@ import { splitMessage, checkExistedWordOverAcceptedChars } from './utils';
 import MessageInput from './components/MessageInput';
 import TweetButton from './components/TweetButton';
 import MessageError from './components/MessageError';
+import MessageList from './components/MessageList';
 
 const stylesheet = {
   App: {
@@ -28,7 +29,6 @@ const App = ({classes}) => {
   const [tweetedMessages, setTweetedMessages] = useState([]);
 
   const onInputMessageChanged = useCallback((event) => {
-    debugger;
     const changedInputMessage = event.target.value;
     try {
       checkExistedWordOverAcceptedChars(changedInputMessage);
@@ -62,19 +62,7 @@ const App = ({classes}) => {
         <MessageError message={errorMessage}></MessageError>
         <TweetButton onClick={sendMessage} disabled={!!errorMessage || !inputMessage}/>
       </div>
-      <ul>
-        {
-          tweetedMessages.map((tweetedMessage) => {
-            return <li>{tweetedMessage.inputMessage}
-              <ul>
-                { tweetedMessage.messageSentParts.map((messageSentPart) => {
-                  return <li>{messageSentPart}</li>
-                })}
-              </ul>
-            </li>
-          })
-        }
-      </ul>
+      <MessageList messages={tweetedMessages} />
     </div>
   );
 }
