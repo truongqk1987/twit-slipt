@@ -9,8 +9,19 @@ export const checkExistedWordOverAcceptedChars = (message) => {
   }
 }
 
+const PartIndicator = (totalMessageParts) => {
+  let indicator = 0;
+  let partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
+  return {
+    getString() { return partIndicator },
+    increaseIndicator() {
+      indicator++;
+      partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
+    },
+  }
+}
+
 export const splitMessage = (inputMessage) => {
-  
 
   if (inputMessage.length <= 50) return [ inputMessage ];
 
@@ -27,10 +38,12 @@ export const splitMessage = (inputMessage) => {
 
     // Ensure messageParts is empty for re-calculate
     messageParts.length = 0;
-    let indicator = 0;
-    let partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
-    let counter = partIndicator.length;
-    let startIndex = 0;
+
+    let partIndicator = PartIndicator(totalMessageParts);
+
+    let counter = partIndicator.getString().length;
+    let startWordIndex = 0;
+
     nonWhiteSpaceWords.forEach((word, index) => {
       counter = counter + 1 + word.length // 1 for space between indicator and word
       if (counter > ACCEPTED_MAXIMUM_CHARS) {
@@ -38,31 +51,27 @@ export const splitMessage = (inputMessage) => {
         // So we will return back this word, and reset counter,
         // The counter should be start equal word.length (which be returned);
         counter = word.length;
-        const messagePart = nonWhiteSpaceWords.slice(startIndex, index);
-        indicator++;
-        partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
-        messageParts.push([partIndicator, ...messagePart].join(' '));
-        startIndex = index;
+        const messagePart = nonWhiteSpaceWords.slice(startWordIndex, index);
+        partIndicator.increaseIndicator();
+        messageParts.push([partIndicator.getString(), ...messagePart].join(' '));
+        startWordIndex = index;
         
       }
       if (counter === ACCEPTED_MAXIMUM_CHARS) {
         counter = 0;
-        const messagePart = nonWhiteSpaceWords.slice(startIndex, index + 1);
-        indicator++;
-        partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
-        messageParts.push([partIndicator, ...messagePart].join(' '));
-        startIndex = index;
+        const messagePart = nonWhiteSpaceWords.slice(startWordIndex, index + 1);
+        partIndicator.increaseIndicator();
+        messageParts.push([partIndicator.getString(), ...messagePart].join(' '));
+        startWordIndex = index;
       }
       if (index === nonWhiteSpaceWords.length -1) {
         // When counter < 50 but don't have any word to check
         // Add it as a final message part;
-        const messagePart = nonWhiteSpaceWords.slice(startIndex, index + 1);
-        indicator++;
-        partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
-        messageParts.push([partIndicator, ...messagePart].join(' '));
+        const messagePart = nonWhiteSpaceWords.slice(startWordIndex, index + 1);
+        partIndicator.increaseIndicator();
+        messageParts.push([partIndicator.getString(), ...messagePart].join(' '));
         counter = 0;
-        indicator = 0;
-        startIndex = 0;
+        startWordIndex = 0;
       }
     })
   }
