@@ -1,6 +1,5 @@
 /* eslint-disable no-loop-func */
 import { ACCEPTED_MAXIMUM_CHARS } from './globalConstants';
-import { __values } from 'tslib';
 
 export const checkExistedWordOverAcceptedChars = (message) => {
   const regex = new RegExp(`([\\S]){${ACCEPTED_MAXIMUM_CHARS},}`,'g')
@@ -19,6 +18,7 @@ const PartIndicator = (totalMessageParts) => {
       indicator++;
       partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
     },
+    length() { return partIndicator.length }
   }
 }
 
@@ -57,7 +57,7 @@ export const splitMessage = (inputMessage) => {
 
     let partIndicator = PartIndicator(totalMessageParts);
 
-    let counter = partIndicator.getValue().length;
+    let counter = partIndicator.length();
     let startWordIndex = 0;
 
     nonWhiteSpaceWords.forEach((word, index) => {
@@ -67,7 +67,12 @@ export const splitMessage = (inputMessage) => {
         // So we will return back this word, and reset counter,
         // The counter should be start equal word.length (which be returned);
         partIndicator.increaseIndicator();
-        messageParts.add(partIndicator.getValue(), nonWhiteSpaceWords, startWordIndex, index);
+        messageParts.add(
+          partIndicator.getValue(),
+          nonWhiteSpaceWords,
+          startWordIndex,
+          index
+        );
 
         startWordIndex = index;
         counter = word.length;
@@ -75,7 +80,12 @@ export const splitMessage = (inputMessage) => {
       if (counter === ACCEPTED_MAXIMUM_CHARS) {
         counter = 0;
         partIndicator.increaseIndicator();
-        messageParts.add(partIndicator.getValue(), nonWhiteSpaceWords, startWordIndex, index + 1);
+        messageParts.add(
+          partIndicator.getValue(),
+          nonWhiteSpaceWords,
+          startWordIndex,
+          index + 1
+        );
 
         counter = 0;
         startWordIndex = index;
@@ -84,7 +94,12 @@ export const splitMessage = (inputMessage) => {
         // When counter < 50 but don't have any word to check
         // Add it as a final message part;
         partIndicator.increaseIndicator();
-        messageParts.add(partIndicator.getValue(), nonWhiteSpaceWords, startWordIndex, index + 1);
+        messageParts.add(
+          partIndicator.getValue(),
+          nonWhiteSpaceWords,
+          startWordIndex,
+          index + 1
+        );
 
         counter = 0;
         startWordIndex = 0;
