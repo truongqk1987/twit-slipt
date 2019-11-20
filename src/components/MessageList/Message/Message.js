@@ -1,11 +1,14 @@
 import React from 'react';
+import isEmpty from 'lodash.isempty';
 
 const Message = ({ inputMessage, messageSentParts}) => (
   <li>{inputMessage}
     <ul>
-      { messageSentParts.map((messageSentPart) => {
-        return <li>{messageSentPart}</li>
-      })}
+      { 
+        !isEmpty(messageSentParts) && messageSentParts.map((messageSentPart) => {
+          return <li>{messageSentPart}</li>
+        })
+      }
     </ul>
   </li>
 )
