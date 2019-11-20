@@ -10,26 +10,27 @@ export const checkExistedWordOverAcceptedChars = (message) => {
 }
 
 export const splitMessage = (inputMessage) => {
-  let messageParts = [];
+  
 
   if (inputMessage.length <= 50) return [ inputMessage ];
 
   // Error will be caught by the function call splitMessage()
   checkExistedWordOverAcceptedChars(inputMessage);
 
-  let indicator = 0;
-  let totalMessageParts;
-  let partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
-
-  let counter = partIndicator.length;
-  let startIndex = 0;
   const nonWhiteSpaceWords = inputMessage.split(' ');
+
+  let totalMessageParts = -1;
+  let messageParts = [];
 
   while (messageParts.length !== totalMessageParts) {
     totalMessageParts = messageParts.length;
-    indicator = 0;
-    startIndex = 0;
-    messageParts = [];
+
+    // Ensure messageParts is empty for re-calculate
+    messageParts.length = 0;
+    let indicator = 0;
+    let partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
+    let counter = partIndicator.length;
+    let startIndex = 0;
     nonWhiteSpaceWords.forEach((word, index) => {
       counter = counter + 1 + word.length // 1 for space between indicator and word
       if (counter > ACCEPTED_MAXIMUM_CHARS) {
@@ -42,6 +43,7 @@ export const splitMessage = (inputMessage) => {
         partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
         messageParts.push([partIndicator, ...messagePart].join(' '));
         startIndex = index;
+        
       }
       if (counter === ACCEPTED_MAXIMUM_CHARS) {
         counter = 0;
@@ -50,7 +52,6 @@ export const splitMessage = (inputMessage) => {
         partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
         messageParts.push([partIndicator, ...messagePart].join(' '));
         startIndex = index;
-  
       }
       if (index === nonWhiteSpaceWords.length -1) {
         // When counter < 50 but don't have any word to check
@@ -60,6 +61,8 @@ export const splitMessage = (inputMessage) => {
         partIndicator = !!totalMessageParts ? `${indicator}/${totalMessageParts}`:'';
         messageParts.push([partIndicator, ...messagePart].join(' '));
         counter = 0;
+        indicator = 0;
+        startIndex = 0;
       }
     })
   }
